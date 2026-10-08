@@ -11,10 +11,15 @@ const SCENARIOS = [
     visualType: "chat_group",
     story: "Az osztálycsoportban valaki megoszt egy kínos fényképet Mátéról. A kép egy iskolai rendezvényen készült, amikor Máté kellemetlen helyzetbe került.\n\nNéhányan nevetnek, valaki mémként szerkeszti tovább. A kép már egy másik csoportba is eljutott.\n\nLilla új üzenetet küld:\n„Na, ki küldi tovább? 😂”",
     question: "Te mit tennél?",
+    groupName: "XII. B – Osztálycsoport",
+    memberCount: "24 tag",
     chatMessages: [
-      { sender: "Péter", avatar: "P", text: "Haha nézzétek meg ezt! 😂", time: "14:22" },
-      { sender: "MémGen", avatar: "M", text: "[Kép csatolva: Máté_mém_v1.jpg]", time: "14:23" },
-      { sender: "Lilla", avatar: "L", text: "Na, ki küldi tovább? 😂", time: "14:25", isKey: true }
+      { sender: "Péter", avatar: "P", text: "Nem hiszitek el, mi történt ma a műsor alatt... 😂😂😂", time: "14:12", color: "#2196F3" },
+      { sender: "Péter", avatar: "P", image: "assets/kinos_foto.png", time: "14:12", color: "#2196F3" },
+      { sender: "Dóri", avatar: "D", text: "Jajjjj 😂😂😂 Ez nagyon jó!", time: "14:13", color: "#E91E63" },
+      { sender: "Ákos", avatar: "Á", text: "Már mém is van belőle 😅", time: "14:14", color: "#FF9800" },
+      { sender: "Péter", avatar: "P", text: "Már a 9.B csoportban is kering... 🤣", time: "14:14", color: "#2196F3" },
+      { sender: "Lilla", avatar: "L", text: "Na, ki küldi tovább? 😂", time: "14:15", isKey: true, color: "#9C27B0" }
     ],
     choices: {
       A: {

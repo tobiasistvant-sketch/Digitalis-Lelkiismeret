@@ -253,22 +253,32 @@ document.addEventListener('DOMContentLoaded', () => {
     switch (sc.visualType) {
       case 'chat_group':
         innerHTML = `
-          <div class="mockup-header">
+          <div class="mockup-header messenger-header">
             <div class="mockup-title-area">
-              <div class="mockup-icon">👥</div>
+              <div class="mockup-icon group-avatar">👥</div>
               <div>
-                <div class="mockup-name">Osztálycsoport (XII. B)</div>
-                <div class="mockup-sub">Online üzenetváltás</div>
+                <div class="mockup-name">${sc.groupName || 'XII. B – Osztálycsoport'}</div>
+                <div class="mockup-sub">${sc.memberCount || '24 tag'}</div>
               </div>
             </div>
           </div>
-          <p class="mockup-story-p">${formattedStory}</p>
-          <div class="chat-window">
+          <div class="chat-window messenger-window">
             ${sc.chatMessages ? sc.chatMessages.map(msg => `
-              <div class="chat-bubble ${msg.isKey ? 'key-message' : ''}">
-                <div class="chat-sender">${msg.sender} <span class="time">${msg.time}</span></div>
-                <div>${msg.text}</div>
-                ${msg.text.includes('mém') ? '<div class="chat-image-attachment">🖼️ [Máté_mém_kínos_kép.jpg]</div>' : ''}
+              <div class="chat-row ${msg.isKey ? 'key-row' : ''}">
+                <div class="user-avatar" style="background-color: ${msg.color || '#2196F3'}">${msg.avatar || msg.sender.charAt(0)}</div>
+                <div class="chat-bubble-container">
+                  <div class="chat-bubble ${msg.isKey ? 'key-message' : ''}">
+                    <div class="chat-sender" style="color: ${msg.color || '#2196F3'}">
+                      ${msg.sender} <span class="time">${msg.time}</span>
+                    </div>
+                    ${msg.text ? `<div class="chat-text">${msg.text}</div>` : ''}
+                    ${msg.image ? `
+                      <div class="chat-image-container">
+                        <img src="${msg.image}" alt="Kínos fotó Mátéról" class="chat-attached-img" />
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
               </div>
             `).join('') : ''}
           </div>
