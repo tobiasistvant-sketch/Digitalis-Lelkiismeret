@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIGITÁLIS LELKIISMERET – Te hogyan döntenél?</title>
+  <meta name="description" content="Interaktív keresztyén internetetikai döntésjáték XII. osztályos tanulók számára.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- SKIP LINK FOR ACCESSIBILITY -->
+  <a href="#main-content" class="skip-link">Ugrás a fő tartalomhoz</a>
+
+  <!-- MAIN CONTAINER -->
+  <div class="app-container">
+
+    <!-- HEADER -->
+    <header class="app-header" role="banner">
+      <div class="header-inner">
+        <div class="logo-area">
+          <div class="logo-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M12 8v8M8 12h8"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="app-title-header">DIGITÁLIS LELKIISMERET</span>
+            <span class="app-subtitle-header">Te hogyan döntenél?</span>
+          </div>
+        </div>
+
+        <div class="header-meta">
+          <span class="subject-badge">Református vallás – keresztyén etika</span>
+          <span id="session-badge" class="session-id-badge" style="display:none;"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main id="main-content" class="app-main" tabIndex="-1">
+
+      <!-- START SCREEN -->
+      <section id="screen-start" class="screen active" aria-labelledby="start-title">
+        <div class="hero-card">
+          <div class="hero-badge">Interaktív etikai döntésjáték XII. osztály számára</div>
+          <h1 id="start-title" class="hero-title">DIGITÁLIS LELKIISMERET</h1>
+          <p class="hero-subtitle">Te hogyan döntenél?</p>
+
+          <p class="hero-intro">
+            „Nyolc helyzet. Nyolc döntés. Mindegyiknek lehetnek következményei.<br>
+            Az online világban is felelősek vagyunk azért, amit teszünk – és azért is, amit elmulasztunk.<br>
+            <strong>Most te döntesz.</strong>”
+          </p>
+
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-icon" aria-hidden="true">🎮</div>
+              <div class="info-text">
+                <strong>8 élethelyzet</strong>
+                <span>Valósághű digitális kontextusok</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon" aria-hidden="true">⏱️</div>
+              <div class="info-text">
+                <strong>15–20 perc</strong>
+                <span>Elmélyült egyéni mérlegelés</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon" aria-hidden="true">⚖️</div>
+              <div class="info-text">
+                <strong>Nincs pontozás</strong>
+                <span>Nincs erkölcsi minősítés</span>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-icon" aria-hidden="true">🔒</div>
+              <div class="info-text">
+                <strong>Végleges döntések</strong>
+                <span>Nincs visszalépés vagy újraválasztás</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="privacy-notice-box">
+            <div class="privacy-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <strong>Adatkezelési tájékoztató:</strong>
+            </div>
+            <p>
+              Az alkalmazás kizárólag a böngésződ helyi tárolójában (localStorage) rögzíti a haladásodat egy véletlenszerű munkamenet-azonosítóval. Személyes nevet vagy e-mail címet nem kérünk. Az eredményeket a játék végén küldheted el a tanárnak, amikor a beküldési funkció aktiválva lesz.
+            </p>
+          </div>
+
+          <div class="action-bar">
+            <button id="btn-start" class="btn btn-primary btn-lg">
+              <span>Játék kezdése</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- SCENARIO & CHOICE SCREEN -->
+      <section id="screen-scenario" class="screen" aria-labelledby="scenario-title">
+        <!-- Progress Bar -->
+        <div class="progress-section">
+          <div class="progress-info">
+            <span id="scenario-step-indicator" class="step-indicator">1 / 8 Helyzet</span>
+            <span id="scenario-theme-badge" class="theme-badge">Téma</span>
+          </div>
+          <div class="progress-bar-bg" role="progressbar" id="progress-bar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="8">
+            <div id="progress-bar-fill" class="progress-bar-fill" style="width: 12.5%;"></div>
+          </div>
+        </div>
+
+        <div class="scenario-layout">
+          <!-- Visual Context Container (Custom UI per scenario) -->
+          <div id="scenario-visual-container" class="visual-container">
+            <!-- Dynamic scenario contextual mockup rendered here -->
+          </div>
+
+          <!-- Question & Choice Options -->
+          <div class="choice-container">
+            <div class="scenario-header-card">
+              <h2 id="scenario-title" class="scenario-title">Helyzet Címe</h2>
+              <p id="scenario-question-text" class="question-prompt">Te mit tennél?</p>
+            </div>
+
+            <div id="choices-grid" class="choices-grid" role="radiogroup" aria-labelledby="scenario-question-text">
+              <!-- Choices A, B, C, D rendered dynamically -->
+            </div>
+
+            <div class="choice-actions">
+              <button id="btn-submit-choice" class="btn btn-accent btn-lg" disabled>
+                <span>Döntés kiválasztása</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- CONSEQUENCE SCREEN (Feedback after confirmation) -->
+      <section id="screen-consequence" class="screen" aria-labelledby="consequence-title">
+        <div class="consequence-header-card">
+          <div class="progress-section compact">
+            <div class="progress-info">
+              <span id="consequence-step-indicator" class="step-indicator">1 / 8 Helyzet</span>
+              <span id="consequence-choice-badge" class="choice-badge">Kiválasztott döntés: A</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div id="consequence-progress-bar-fill" class="progress-bar-fill" style="width: 12.5%;"></div>
+            </div>
+          </div>
+
+          <h2 id="consequence-title" class="consequence-title">Helyzet Címe</h2>
+          <div id="selected-choice-display" class="selected-choice-display">
+            <!-- Selected choice label -->
+          </div>
+        </div>
+
+        <div class="consequence-blocks-grid">
+          <!-- Block 1: Immediate -->
+          <div class="consequence-block block-immediate">
+            <div class="block-icon" aria-hidden="true">⚡</div>
+            <div class="block-content">
+              <h3 class="block-heading">Mi történhet most?</h3>
+              <p id="consequence-immediate-text"></p>
+            </div>
+          </div>
+
+          <!-- Block 2: Long term -->
+          <div class="consequence-block block-longterm">
+            <div class="block-icon" aria-hidden="true">🌱</div>
+            <div class="block-content">
+              <h3 class="block-heading">Mi történhet később?</h3>
+              <p id="consequence-longterm-text"></p>
+            </div>
+          </div>
+
+          <!-- Block 3: Ethics -->
+          <div class="consequence-block block-ethics">
+            <div class="block-icon" aria-hidden="true">⚖️</div>
+            <div class="block-content">
+              <h3 class="block-heading">Etikai szempont</h3>
+              <p id="consequence-ethics-text"></p>
+            </div>
+          </div>
+
+          <!-- Block 4: Biblical Guidance -->
+          <div class="consequence-block block-biblical">
+            <div class="block-icon" aria-hidden="true">📖</div>
+            <div class="block-content">
+              <h3 class="block-heading">Bibliai iránymutatás</h3>
+              <p id="consequence-biblical-text"></p>
+            </div>
+          </div>
+
+          <!-- Block 5: Think Further -->
+          <div class="consequence-block block-think">
+            <div class="block-icon" aria-hidden="true">🤔</div>
+            <div class="block-content">
+              <h3 class="block-heading">Gondold tovább!</h3>
+              <p id="consequence-think-text"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-bar consequence-action">
+          <button id="btn-next-scenario" class="btn btn-primary btn-lg">
+            <span id="btn-next-scenario-text">Tovább a következő helyzetre</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </section>
+
+
+      <!-- SUMMARY & REFLECTION SCREEN -->
+      <section id="screen-summary" class="screen" aria-labelledby="summary-title">
+        <div class="summary-hero">
+          <h2 id="summary-title" class="summary-title">A döntéseid nyomot hagynak</h2>
+          <p class="summary-subtitle">
+            Végigjártál nyolc digitális élethelyzetet. Nem pontokat gyűjtöttél, hanem döntéseket hoztál.<br>
+            A valódi kérdés nem az, hogy hány helyes választ adtál, hanem az, hogy mit tanultál a döntéseid következményeiből.
+          </p>
+        </div>
+
+        <!-- Decision Table -->
+        <div class="summary-section">
+          <h3 class="section-title">Meghozott döntéseid áttekintése</h3>
+          <div class="table-responsive">
+            <table class="decisions-table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Döntéshelyzet</th>
+                  <th scope="col">Választás</th>
+                  <th scope="col">Döntés megnevezése</th>
+                </tr>
+              </thead>
+              <tbody id="summary-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Reflection Questions -->
+        <div class="summary-section reflection-section">
+          <h3 class="section-title">Személyes reflexió</h3>
+          <p class="reflection-help">Gondold át a tapasztalataidat! A válaszok ajánlott hossza 1–3 mondat. (A válaszok automatikusan mentődnek.)</p>
+
+          <form id="reflection-form" onsubmit="return false;">
+            <div class="form-group">
+              <label for="ref-q1" class="form-label">1. Melyik döntés volt számodra a legnehezebb? Miért?</label>
+              <textarea id="ref-q1" class="form-textarea" rows="3" placeholder="Írd le a gondolataidat..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="ref-q2" class="form-label">2. Melyik helyzetben gondolkodtál el leginkább a választásod következményein?</label>
+              <textarea id="ref-q2" class="form-textarea" rows="3" placeholder="Írd le a gondolataidat..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="ref-q3" class="form-label">3. Fogalmazz meg egy olyan szabályt, amelyet ezentúl szeretnél betartani az online térben!</label>
+              <textarea id="ref-q3" class="form-textarea" rows="3" placeholder="Pl.: Mielőtt továbbküldök egy képet, átgondolom..."></textarea>
+            </div>
+          </form>
+        </div>
+
+        <!-- Submission / Export Section -->
+        <div class="summary-section submission-section">
+          <h3 class="section-title">Eredmények beküldése és exportálása</h3>
+          <p class="submission-info">
+            Munkamenet-azonosító: <strong id="summary-session-id" class="code-badge">DL-XXXXXX</strong>
+          </p>
+
+          <div id="submission-notice" class="notice-box notice-info" style="display:none;">
+            <!-- Submission status message rendered here -->
+          </div>
+
+          <div class="submission-actions">
+            <button id="btn-submit-teacher" class="btn btn-accent btn-lg">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <span>Eredmény elküldése a tanárnak</span>
+            </button>
+
+            <button id="btn-export-json" class="btn btn-outline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Eredmények letöltése (JSON)</span>
+            </button>
+
+            <button id="btn-copy-json" class="btn btn-outline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Eredmények másolása vágólapra</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="app-footer" role="contentinfo">
+      <div class="footer-inner">
+        <p>© DIGITÁLIS LELKIISMERET | Református vallás – keresztyén etika (XII. osztály)</p>
+        <p class="footer-sub">Bibliai hivatkozások: RÚF 2014 (Revideált új fordítású Biblia)</p>
+      </div>
+    </footer>
+
+  </div>
+
+
+  <!-- CONFIRMATION MODAL -->
+  <div id="confirm-modal" class="modal-overlay" tabIndex="-1" aria-hidden="true" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-desc">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-icon" aria-hidden="true">⚠️</div>
+        <h3 id="modal-title" class="modal-title">Ez a végleges döntésed?</h3>
+      </div>
+      <div id="modal-desc" class="modal-body">
+        <p>A választásod rögzítésre kerül. Ezután megismerheted a lehetséges következményeket, de a döntéseden már nem változtathatsz.</p>
+        <div id="modal-selected-choice-preview" class="selected-choice-preview">
+          <!-- Preview of chosen letter and label -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-btn-confirm" class="btn btn-accent">
+          Megerősítem a döntést
+        </button>
+        <button id="modal-btn-cancel" class="btn btn-outline">
+          Még nem döntöttem
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SCRIPTS -->
+  <script src="js/scenarios.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/submission.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
