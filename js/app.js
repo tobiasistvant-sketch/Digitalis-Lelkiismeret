@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSubmitTeacher: document.getElementById('btn-submit-teacher'),
     btnExportJson: document.getElementById('btn-export-json'),
     btnCopyJson: document.getElementById('btn-copy-json'),
-    btnResetGame: document.getElementById('btn-reset-game'),
 
     // Confirmation Modal
     confirmModal: document.getElementById('confirm-modal'),
@@ -125,10 +124,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       case 'SCENARIO':
       case 'CONFIRM':
-        elements.screens.scenario.classList.add('active');
-        renderScenarioScreen();
-        if (state.currentState === 'CONFIRM') {
-          showModal();
+        // Guard: If this scenario already has a confirmed decision, jump to CONSEQUENCE
+        const currentSc = window.SCENARIOS[state.currentScenarioIndex];
+        if (currentSc && state.decisions[currentSc.id]) {
+          state.currentState = 'CONSEQUENCE';
+          saveState();
+          elements.screens.consequence.classList.add('active');
+          renderConsequenceScreen();
+        } else {
+          elements.screens.scenario.classList.add('active');
+          renderScenarioScreen();
+          if (state.currentState === 'CONFIRM') {
+            showModal();
+          }
         }
         break;
 
@@ -431,7 +439,20 @@ document.addEventListener('DOMContentLoaded', () => {
   function confirmDecision() {
     const scenarioIndex = state.currentScenarioIndex;
     const sc = window.SCENARIOS[scenarioIndex];
+
+    // Safety Guard: Once recorded, never overwrite
+    if (state.decisions[sc.id]) {
+      hideModal();
+      setAppState('CONSEQUENCE');
+      return;
+    }
+
     const letter = state.selectedChoiceLetter;
+    if (!letter) {
+      hideModal();
+      setAppState('SCENARIO');
+      return;
+    }
 
     // Permanently record decision
     state.decisions[sc.id] = letter;
@@ -475,8 +496,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleNextScenario() {
-    if (state.currentScenarioIndex < window.SCENARIOS.length - 1) {
-      state.currentScenarioIndex += 1;
+    // Find next unanswered scenario index
+    let nextUnanswered = -1;
+    for (let i = 0; i < window.SCENARIOS.length; i++) {
+      if (!state.decisions[window.SCENARIOS[i].id]) {
+        nextUnanswered = i;
+        break;
+      }
+    }
+
+    if (nextUnanswered !== -1) {
+      state.currentScenarioIndex = nextUnanswered;
       state.selectedChoiceLetter = null;
       setAppState('SCENARIO');
     } else {
@@ -573,16 +603,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function handleResetGame() {
-    if (confirm('Biztosan törölni szeretnéd a meghozott döntéseidet és újraindítani a játékot?')) {
-      window.StorageHandler.clear();
-      state = window.StorageHandler.getInitialState();
-      saveState();
-      elements.sessionBadge.textContent = state.sessionId;
-      setAppState('START');
-    }
-  }
-
   // --- EVENT LISTENERS ATTACHMENT ---
   function attachEventListeners() {
     elements.btnStart.addEventListener('click', () => {
@@ -623,7 +643,6 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.btnSubmitTeacher.addEventListener('click', handleSubmitTeacher);
     elements.btnExportJson.addEventListener('click', handleExportJSON);
     elements.btnCopyJson.addEventListener('click', handleCopyJSON);
-    elements.btnResetGame.addEventListener('click', handleResetGame);
   }
 
   // Start app
