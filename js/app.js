@@ -12,8 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionId: '',
     currentState: 'START',
     currentScenarioIndex: 0,
-    selectedChoiceLetter: null,
+    selectedChoiceLetter: null, // Stores the original choice key ('A', 'B', 'C', or 'D')
     decisions: {},
+    choiceOrders: {}, // scenarioId -> array of originalChoiceKeys e.g. ['C', 'A', 'D', 'B']
     reflections: {
       q1: '',
       q2: '',
@@ -72,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSubmitTeacher: document.getElementById('btn-submit-teacher'),
     btnExportJson: document.getElementById('btn-export-json'),
     btnCopyJson: document.getElementById('btn-copy-json'),
+    btnRestartGame: document.getElementById('btn-restart-game'),
 
     // Confirmation Modal
     confirmModal: document.getElementById('confirm-modal'),
@@ -82,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- INIT APPLICATION ---
   function init() {
-    const loaded = window.StorageHandler.load();
+    const loaded = window.StorageHandler.load(window.SCENARIOS);
     state = loaded.state;
 
     if (loaded.versionMismatch) {
@@ -187,30 +189,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // Custom Visual Context Mockup
     renderVisualMockup(sc);
 
-    // Choices Radio Grid
+    // Choices Radio Grid (Shuffled display order)
     elements.choicesGrid.innerHTML = '';
     elements.btnSubmitChoice.disabled = !state.selectedChoiceLetter;
 
-    ['A', 'B', 'C', 'D'].forEach(letter => {
-      const choice = sc.choices[letter];
+    // Retrieve shuffled originalChoiceKeys for this scenario or fallback to default
+    const displaySlots = ['A', 'B', 'C', 'D'];
+    const shuffledKeys = (state.choiceOrders && state.choiceOrders[sc.id]) ? state.choiceOrders[sc.id] : ['A', 'B', 'C', 'D'];
+
+    shuffledKeys.forEach((originalKey, slotIndex) => {
+      const slotLetter = displaySlots[slotIndex]; // 'A', 'B', 'C', or 'D' for visual position
+      const choice = sc.choices[originalKey];
+      const isSelected = state.selectedChoiceLetter === originalKey;
+
       const card = document.createElement('div');
-      const isSelected = state.selectedChoiceLetter === letter;
       card.className = `choice-card ${isSelected ? 'selected' : ''}`;
       card.setAttribute('role', 'radio');
       card.setAttribute('aria-checked', isSelected ? 'true' : 'false');
       card.setAttribute('tabindex', '0');
-      card.dataset.letter = letter;
+      card.dataset.letter = slotLetter; // Visual slot letter for CSS color styling
+      card.dataset.originalKey = originalKey;
 
       card.innerHTML = `
-        <div class="choice-letter-badge">${letter}</div>
+        <div class="choice-letter-badge">${slotLetter}</div>
         <div class="choice-text">${choice.label}</div>
       `;
 
-      card.addEventListener('click', () => selectChoice(letter));
+      card.addEventListener('click', () => selectChoice(originalKey));
       card.addEventListener('keydown', (e) => {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
-          selectChoice(letter);
+          selectChoice(originalKey);
         }
       });
 
@@ -218,11 +227,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function selectChoice(letter) {
-    state.selectedChoiceLetter = letter;
+  function selectChoice(originalKey) {
+    state.selectedChoiceLetter = originalKey;
     const cards = elements.choicesGrid.querySelectorAll('.choice-card');
     cards.forEach(card => {
-      if (card.dataset.letter === letter) {
+      if (card.dataset.originalKey === originalKey) {
         card.classList.add('selected');
         card.setAttribute('aria-checked', 'true');
       } else {
@@ -345,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
           <p class="mockup-story-p">${formattedStory}</p>
-          <div class="chat-bubble" style="border-left: 3px solid var(--color-turquoise);">
+          <div class="chat-bubble" style="border-left: 3px solid var(--color-choice-b);">
             <div class="chat-sender">Barátod</div>
             <div>„Kérlek, ezt kezeld teljesen bizalmasan, senkinek ne mondd el...”</div>
           </div>
@@ -422,10 +431,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function showModal() {
     const scenarioIndex = state.currentScenarioIndex;
     const sc = window.SCENARIOS[scenarioIndex];
-    const letter = state.selectedChoiceLetter;
-    const choice = sc.choices[letter];
+    const key = state.selectedChoiceLetter;
+    const choice = sc.choices[key];
 
-    elements.modalChoicePreview.textContent = `Választott döntés (${letter}): ${choice.label}`;
+    // Find displayed slot letter (A, B, C, D) corresponding to this originalKey
+    const displaySlots = ['A', 'B', 'C', 'D'];
+    const shuffledKeys = (state.choiceOrders && state.choiceOrders[sc.id]) ? state.choiceOrders[sc.id] : displaySlots;
+    const slotIndex = shuffledKeys.indexOf(key);
+    const slotLetter = slotIndex !== -1 ? displaySlots[slotIndex] : key;
+
+    elements.modalChoicePreview.textContent = `Választott döntés (${slotLetter}): ${choice.label}`;
     elements.confirmModal.classList.add('active');
     elements.confirmModal.setAttribute('aria-hidden', 'false');
     elements.modalBtnConfirm.focus();
@@ -447,15 +462,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const letter = state.selectedChoiceLetter;
-    if (!letter) {
+    const originalKey = state.selectedChoiceLetter;
+    if (!originalKey) {
       hideModal();
       setAppState('SCENARIO');
       return;
     }
 
-    // Permanently record decision
-    state.decisions[sc.id] = letter;
+    // Permanently record decision mapping to original key
+    state.decisions[sc.id] = originalKey;
     saveState();
 
     hideModal();
@@ -471,16 +486,22 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderConsequenceScreen() {
     const scenarioIndex = state.currentScenarioIndex;
     const sc = window.SCENARIOS[scenarioIndex];
-    const letter = state.decisions[sc.id];
-    const choice = sc.choices[letter];
+    const originalKey = state.decisions[sc.id];
+    const choice = sc.choices[originalKey];
+
+    // Find display slot letter
+    const displaySlots = ['A', 'B', 'C', 'D'];
+    const shuffledKeys = (state.choiceOrders && state.choiceOrders[sc.id]) ? state.choiceOrders[sc.id] : displaySlots;
+    const slotIndex = shuffledKeys.indexOf(originalKey);
+    const slotLetter = slotIndex !== -1 ? displaySlots[slotIndex] : originalKey;
 
     const stepNum = scenarioIndex + 1;
     elements.consequenceStepIndicator.textContent = `${stepNum} / ${window.SCENARIOS.length} Helyzet`;
-    elements.consequenceChoiceBadge.textContent = `Kiválasztott döntés: ${letter}`;
+    elements.consequenceChoiceBadge.textContent = `Kiválasztott döntés: ${slotLetter}`;
     elements.consequenceProgressBarFill.style.width = `${(stepNum / window.SCENARIOS.length) * 100}%`;
 
     elements.consequenceTitle.textContent = sc.title;
-    elements.selectedChoiceDisplay.textContent = `${letter} – ${choice.label}`;
+    elements.selectedChoiceDisplay.textContent = `${slotLetter} – ${choice.label}`;
 
     elements.consequenceImmediateText.textContent = choice.immediate;
     elements.consequenceLongtermText.textContent = choice.longTerm;
@@ -520,16 +541,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Populate Table
     elements.summaryTableBody.innerHTML = '';
+    const displaySlots = ['A', 'B', 'C', 'D'];
+
     window.SCENARIOS.forEach((sc, idx) => {
-      const letter = state.decisions[sc.id] || '-';
-      const choiceObj = sc.choices[letter];
+      const originalKey = state.decisions[sc.id];
+      const choiceObj = sc.choices[originalKey];
+
+      let slotLetter = '-';
+      if (originalKey) {
+        const shuffledKeys = (state.choiceOrders && state.choiceOrders[sc.id]) ? state.choiceOrders[sc.id] : displaySlots;
+        const slotIndex = shuffledKeys.indexOf(originalKey);
+        slotLetter = slotIndex !== -1 ? displaySlots[slotIndex] : originalKey;
+      }
+
       const titleShort = choiceObj ? choiceObj.shortTitle || choiceObj.label : 'Nincs döntés';
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td><strong>${idx + 1}.</strong></td>
         <td>${sc.title}</td>
-        <td><span class="choice-pill">${letter}</span></td>
+        <td><span class="choice-pill">${slotLetter}</span></td>
         <td>${titleShort}</td>
       `;
       elements.summaryTableBody.appendChild(tr);
@@ -603,6 +634,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --- RESTART GAME ACTION ---
+  function handleRestartGame() {
+    const confirmText = 'Biztosan új játékot szeretnél indítani? Az előző játék helyben tárolt eredményei törlődnek.';
+    if (confirm(confirmText)) {
+      window.StorageHandler.clear();
+      state = window.StorageHandler.getInitialState(window.SCENARIOS);
+      saveState();
+
+      elements.sessionBadge.textContent = state.sessionId;
+      setAppState('START');
+    }
+  }
+
   // --- EVENT LISTENERS ATTACHMENT ---
   function attachEventListeners() {
     elements.btnStart.addEventListener('click', () => {
@@ -643,6 +687,9 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.btnSubmitTeacher.addEventListener('click', handleSubmitTeacher);
     elements.btnExportJson.addEventListener('click', handleExportJSON);
     elements.btnCopyJson.addEventListener('click', handleCopyJSON);
+    if (elements.btnRestartGame) {
+      elements.btnRestartGame.addEventListener('click', handleRestartGame);
+    }
   }
 
   // Start app
