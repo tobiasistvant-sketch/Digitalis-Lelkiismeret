@@ -1473,3 +1473,33 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+.block-biblical .block-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.biblical-reference {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #15803D;
+}
+
+.biblical-quote {
+  font-style: italic;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #14283B;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.6rem 0.85rem;
+  border-left: 3px solid #16A34A;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.biblical-teaching {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #1C2D37;
+}
