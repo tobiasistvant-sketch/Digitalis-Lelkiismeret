@@ -68,7 +68,8 @@ const SCENARIOS = [
     id: 2,
     title: "AZ INTERNET NEM FELEJT",
     theme: "Sértő komment, harag, bűnbánat, jóvátétel.",
-    visualType: "social_post_comments",
+    visualType: "image_scene",
+    image: "assets/internet_nem_felejt.png",
     story: "Egy nyilvános bejegyzés alatt heves vitába keveredtél egy ismerősöddel. Dühödben személyeskedő, sértő kommentet írtál.\n\nMásnap már megbántad, amit mondtál.\n\nA hozzászólásról azonban valaki képernyőképet készített, és több ismerősöd is látta.",
     question: "Mit teszel most?",
     choices: {
@@ -118,7 +119,8 @@ const SCENARIOS = [
     id: 3,
     title: "AZ AI MINDENT MEGOLD?",
     theme: "Mesterséges intelligencia, becsületesség, tanulás, felelősség.",
-    visualType: "ai_chat_editor",
+    visualType: "image_scene",
+    image: "assets/ai_mindent_megold.png",
     story: "Holnapig be kell adnod egy fontos iskolai dolgozatot. Már késő este van, és alig haladtál.\n\nMegnyitsz egy mesterségesintelligencia-alkalmazást, amely néhány másodperc alatt teljes dolgozatot készít.\n\nA feladat kiírása nem részletezi pontosan, milyen AI-használat megengedett.",
     question: "Hogyan használod az elkészült szöveget?",
     choices: {
@@ -168,7 +170,8 @@ const SCENARIOS = [
     id: 4,
     title: "EGY HÍR, AMELY TÚL HIHETŐ",
     theme: "Álhírek, igazság, felelős tájékozódás.",
-    visualType: "news_feed",
+    visualType: "image_scene",
+    image: "assets/alhir_osztondij.png",
     story: "Egy ismerősöd megoszt egy felháborító hírt. A bejegyzés szerint egy ismert intézmény súlyos visszaélést követett el.\n\nA poszt több ezer reakciót kapott, és sokan követelik, hogy mindenki ossza tovább.\n\nA bejegyzésben nincs ellenőrizhető forrás.",
     question: "Mit teszel?",
     choices: {
@@ -218,7 +221,8 @@ const SCENARIOS = [
     id: 5,
     title: "A PRIVÁT ÜZENET",
     theme: "Bizalom, titoktartás, személyes információk.",
-    visualType: "private_chat",
+    visualType: "image_scene",
+    image: "assets/privat_uzenet.png",
     story: "Egy közeli barátod személyes családi problémájáról ír neked. Megkér, hogy a beszélgetést kezeld bizalmasan.\n\nMásnap egy közös ismerősötök észreveszi, hogy valami történt, és arra kér, mutasd meg neki az üzeneteket.",
     question: "Hogyan reagálsz?",
     choices: {
@@ -268,7 +272,8 @@ const SCENARIOS = [
     id: 6,
     title: "A KOMMENTHÁBORÚ",
     theme: "Hitvallás, szólásszabadság, tisztelet, vallási véleménykülönbség.",
-    visualType: "public_debate",
+    visualType: "image_scene",
+    image: "assets/kommenthaboru.png",
     story: "Egy közösségi oldalon valaki gúnyos megjegyzést tesz a keresztyén hitre.\n\nTöbben csatlakoznak a vitához. Egyesek egyszerűen nem értenek egyet a vallásos világnézettel, mások személyeskedő, sértő megjegyzéseket írnak.\n\nEgy hozzászóló téged is megszólít:\n„Na, erre mit mondasz, ha olyan nagy hívő vagy?”",
     question: "Hogyan reagálsz?",
     choices: {
@@ -318,7 +323,8 @@ const SCENARIOS = [
     id: 7,
     title: "CSAK MÉG ÖT PERC!",
     theme: "Képernyőidő, szabadság, önuralom, digitális szokások.",
-    visualType: "late_night_feed",
+    visualType: "image_scene",
+    image: "assets/csak_meg_ot_perc.png",
     story: "Éjfél után jár az idő (00:17).\n\nMásnap fontos dolgozatot írsz. Már rég le kellett volna feküdnöd, de a közösségi alkalmazás folyamatosan újabb érdekes videókat ajánl.\n\nA következő videó csak 40 másodperces.\n\nA képernyőn megjelenik az üzenet:\n„Ezt még látnod kell!”",
     question: "Mit teszel?",
     choices: {
@@ -368,7 +374,8 @@ const SCENARIOS = [
     id: 8,
     title: "A MESTERSÉGES ARC",
     theme: "AI-képek, hamisítás, emberi méltóság, felelősség.",
-    visualType: "ai_generator",
+    visualType: "image_scene",
+    image: "assets/mesterseges_arc.png",
     story: "Egy ismerősöd mesterséges intelligenciával képet készített az egyik tanárotokról.\n\nA kép nem valódi fénykép, de rendkívül élethű. A tanárt megalázó helyzetben ábrázolja.\n\nAz ismerősöd ezt írja:\n„Ez zseniális! Küldd tovább, hadd lássa mindenki!”",
     question: "Hogyan döntesz?",
     choices: {
