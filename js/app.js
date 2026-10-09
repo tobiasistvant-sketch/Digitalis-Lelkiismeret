@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Configured Apps Script URL (place real endpoint here when available)
   const GOOGLE_APPS_SCRIPT_URL = '';
 
+  // Prevent multiple rapid clicks from registering multiple decisions
+  let isProcessingChoice = false;
+
   // App State Object
   let state = {
     version: window.CURRENT_VERSION || '1.0.0',
@@ -46,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
     scenarioTitle: document.getElementById('scenario-title'),
     scenarioQuestionText: document.getElementById('scenario-question-text'),
     choicesGrid: document.getElementById('choices-grid'),
-    btnSubmitChoice: document.getElementById('btn-submit-choice'),
 
     // Consequence screen
     consequenceStepIndicator: document.getElementById('consequence-step-indicator'),
@@ -57,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     consequenceImmediateText: document.getElementById('consequence-immediate-text'),
     consequenceLongtermText: document.getElementById('consequence-longterm-text'),
     consequenceEthicsText: document.getElementById('consequence-ethics-text'),
-    consequenceBiblicalText: document.getElementById('consequence-biblical-text'),
+    consequenceBiblicalContainer: document.getElementById('consequence-biblical-container'),
     consequenceThinkText: document.getElementById('consequence-think-text'),
     btnNextScenario: document.getElementById('btn-next-scenario'),
     btnNextScenarioText: document.getElementById('btn-next-scenario-text'),
@@ -78,13 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Image Lightbox Modal
     imageModal: document.getElementById('image-modal'),
     lightboxImg: document.getElementById('lightbox-img'),
-    lightboxClose: document.getElementById('lightbox-close'),
-
-    // Confirmation Modal
-    confirmModal: document.getElementById('confirm-modal'),
-    modalChoicePreview: document.getElementById('modal-selected-choice-preview'),
-    modalBtnConfirm: document.getElementById('modal-btn-confirm'),
-    modalBtnCancel: document.getElementById('modal-btn-cancel')
+    lightboxClose: document.getElementById('lightbox-close')
   };
 
   // --- INIT APPLICATION ---
@@ -121,9 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
       screen.classList.remove('active');
     });
 
-    // Close modal
-    hideModal();
-
     switch (state.currentState) {
       case 'START':
         elements.screens.start.classList.add('active');
@@ -141,9 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           elements.screens.scenario.classList.add('active');
           renderScenarioScreen();
-          if (state.currentState === 'CONFIRM') {
-            showModal();
-          }
         }
         break;
 
@@ -173,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- SCENARIO SCREEN RENDER ---
   function renderScenarioScreen() {
+    isProcessingChoice = false;
     const scenarioIndex = state.currentScenarioIndex;
     const sc = window.SCENARIOS[scenarioIndex];
 
@@ -194,25 +185,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Custom Visual Context Mockup
     renderVisualMockup(sc);
 
-    // Choices Radio Grid (Shuffled display order)
+    // Choices Grid
     elements.choicesGrid.innerHTML = '';
-    elements.btnSubmitChoice.disabled = !state.selectedChoiceLetter;
 
-    // Retrieve shuffled originalChoiceKeys for this scenario or fallback to default
     const displaySlots = ['A', 'B', 'C', 'D'];
     const shuffledKeys = (state.choiceOrders && state.choiceOrders[sc.id]) ? state.choiceOrders[sc.id] : ['A', 'B', 'C', 'D'];
 
     shuffledKeys.forEach((originalKey, slotIndex) => {
-      const slotLetter = displaySlots[slotIndex]; // 'A', 'B', 'C', or 'D' for visual position
+      const slotLetter = displaySlots[slotIndex];
       const choice = sc.choices[originalKey];
-      const isSelected = state.selectedChoiceLetter === originalKey;
 
       const card = document.createElement('div');
-      card.className = `choice-card ${isSelected ? 'selected' : ''}`;
-      card.setAttribute('role', 'radio');
-      card.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+      card.className = 'choice-card';
+      card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
-      card.dataset.letter = slotLetter; // Visual slot letter for CSS color styling
+      card.dataset.letter = slotLetter;
       card.dataset.originalKey = originalKey;
 
       card.innerHTML = `
@@ -220,11 +207,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="choice-text">${choice.label}</div>
       `;
 
-      card.addEventListener('click', () => selectChoice(originalKey));
+      card.addEventListener('click', () => makeDirectDecision(originalKey));
       card.addEventListener('keydown', (e) => {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
-          selectChoice(originalKey);
+          makeDirectDecision(originalKey);
         }
       });
 
@@ -232,19 +219,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function selectChoice(originalKey) {
+  // --- DIRECT DECISION HANDLER (Instant Lock & Navigate to Consequence) ---
+  function makeDirectDecision(originalKey) {
+    if (isProcessingChoice) return;
+    isProcessingChoice = true;
+
+    const scenarioIndex = state.currentScenarioIndex;
+    const sc = window.SCENARIOS[scenarioIndex];
+
+    if (!sc) return;
+
+    // Guard: Prevent overwriting existing decisions
+    if (state.decisions[sc.id]) {
+      setAppState('CONSEQUENCE');
+      return;
+    }
+
     state.selectedChoiceLetter = originalKey;
-    const cards = elements.choicesGrid.querySelectorAll('.choice-card');
-    cards.forEach(card => {
-      if (card.dataset.originalKey === originalKey) {
-        card.classList.add('selected');
-        card.setAttribute('aria-checked', 'true');
-      } else {
-        card.classList.remove('selected');
-        card.setAttribute('aria-checked', 'false');
-      }
-    });
-    elements.btnSubmitChoice.disabled = false;
+    state.decisions[sc.id] = originalKey;
+    saveState();
+
+    setAppState('CONSEQUENCE');
   }
 
   // --- LIGHTBOX ZOOM MODAL HANDLERS ---
@@ -331,61 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- CONFIRMATION MODAL HANDLERS ---
-  function showModal() {
-    const scenarioIndex = state.currentScenarioIndex;
-    const sc = window.SCENARIOS[scenarioIndex];
-    const key = state.selectedChoiceLetter;
-    const choice = sc.choices[key];
-
-    // Find displayed slot letter (A, B, C, D) corresponding to this originalKey
-    const displaySlots = ['A', 'B', 'C', 'D'];
-    const shuffledKeys = (state.choiceOrders && state.choiceOrders[sc.id]) ? state.choiceOrders[sc.id] : displaySlots;
-    const slotIndex = shuffledKeys.indexOf(key);
-    const slotLetter = slotIndex !== -1 ? displaySlots[slotIndex] : key;
-
-    elements.modalChoicePreview.textContent = `Választott döntés (${slotLetter}): ${choice.label}`;
-    elements.confirmModal.classList.add('active');
-    elements.confirmModal.setAttribute('aria-hidden', 'false');
-    elements.modalBtnConfirm.focus();
-  }
-
-  function hideModal() {
-    elements.confirmModal.classList.remove('active');
-    elements.confirmModal.setAttribute('aria-hidden', 'true');
-  }
-
-  function confirmDecision() {
-    const scenarioIndex = state.currentScenarioIndex;
-    const sc = window.SCENARIOS[scenarioIndex];
-
-    // Safety Guard: Once recorded, never overwrite
-    if (state.decisions[sc.id]) {
-      hideModal();
-      setAppState('CONSEQUENCE');
-      return;
-    }
-
-    const originalKey = state.selectedChoiceLetter;
-    if (!originalKey) {
-      hideModal();
-      setAppState('SCENARIO');
-      return;
-    }
-
-    // Permanently record decision mapping to original key
-    state.decisions[sc.id] = originalKey;
-    saveState();
-
-    hideModal();
-    setAppState('CONSEQUENCE');
-  }
-
-  function cancelModal() {
-    hideModal();
-    setAppState('SCENARIO');
-  }
-
   // --- CONSEQUENCE SCREEN RENDER ---
   function renderConsequenceScreen() {
     const scenarioIndex = state.currentScenarioIndex;
@@ -410,13 +350,24 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.consequenceImmediateText.textContent = choice.immediate;
     elements.consequenceLongtermText.textContent = choice.longTerm;
     elements.consequenceEthicsText.textContent = choice.ethics;
-    elements.consequenceBiblicalText.textContent = choice.biblicalGuidance;
+
+    // Render Scripture Reference, Quote, and Teaching
+    const igehely = choice.igehely || '';
+    const bibliaiIdezet = choice.bibliaiIdezet || '';
+    const tanitas = choice.tanitas || choice.bibliaiGuidance || '';
+
+    elements.consequenceBiblicalContainer.innerHTML = `
+      <div class="biblical-reference"><strong>IGEHELY:</strong> ${igehely}</div>
+      <div class="biblical-quote"><strong>BIBLIAI IDÉZET:</strong> „${bibliaiIdezet}”</div>
+      <div class="biblical-teaching"><strong>TANÍTÁS:</strong> ${tanitas}</div>
+    `;
+
     elements.consequenceThinkText.textContent = choice.question;
 
     if (scenarioIndex === window.SCENARIOS.length - 1) {
       elements.btnNextScenarioText.textContent = 'Eredményeim megtekintése';
     } else {
-      elements.btnNextScenarioText.textContent = 'Tovább a következő helyzetre';
+      elements.btnNextScenarioText.textContent = 'Következő történet';
     }
   }
 
@@ -572,15 +523,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    elements.btnSubmitChoice.addEventListener('click', () => {
-      if (state.selectedChoiceLetter) {
-        setAppState('CONFIRM');
-      }
-    });
-
-    elements.modalBtnConfirm.addEventListener('click', confirmDecision);
-    elements.modalBtnCancel.addEventListener('click', cancelModal);
-
     if (elements.lightboxClose) {
       elements.lightboxClose.addEventListener('click', closeLightbox);
     }
@@ -599,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reflection auto-save
     [elements.refQ1, elements.refQ2, elements.refQ3].forEach(input => {
-      input.addEventListener('input', saveReflections);
+      if (input) input.addEventListener('input', saveReflections);
     });
 
     elements.btnSubmitTeacher.addEventListener('click', handleSubmitTeacher);

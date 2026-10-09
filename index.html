@@ -137,19 +137,12 @@
             <div id="choices-grid" class="choices-grid" role="radiogroup" aria-labelledby="scenario-question-text">
               <!-- Choices A, B, C, D rendered dynamically -->
             </div>
-
-            <div class="choice-actions">
-              <button id="btn-submit-choice" class="btn btn-accent btn-lg" disabled>
-                <span>Döntés kiválasztása</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              </button>
-            </div>
           </div>
         </div>
       </section>
 
 
-      <!-- CONSEQUENCE SCREEN (Feedback after confirmation) -->
+      <!-- CONSEQUENCE SCREEN (Feedback after choice selection) -->
       <section id="screen-consequence" class="screen" aria-labelledby="consequence-title">
         <div class="consequence-header-card">
           <div class="progress-section compact">
@@ -201,7 +194,9 @@
             <div class="block-icon" aria-hidden="true">📖</div>
             <div class="block-content">
               <h3 class="block-heading">Bibliai iránymutatás</h3>
-              <p id="consequence-biblical-text"></p>
+              <div id="consequence-biblical-container">
+                <!-- Igehely, Bibliai idézet, Tanítás rendered here -->
+              </div>
             </div>
           </div>
 
@@ -217,7 +212,7 @@
 
         <div class="action-bar consequence-action">
           <button id="btn-next-scenario" class="btn btn-primary btn-lg">
-            <span id="btn-next-scenario-text">Tovább a következő helyzetre</span>
+            <span id="btn-next-scenario-text">Következő történet</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
         </div>
@@ -335,30 +330,6 @@
     <div class="lightbox-container">
       <button id="lightbox-close" class="lightbox-close-btn" aria-label="Bezárás">&times;</button>
       <img id="lightbox-img" class="lightbox-image" src="" alt="Nagyított kép" />
-    </div>
-  </div>
-
-  <!-- CONFIRMATION MODAL -->
-  <div id="confirm-modal" class="modal-overlay" tabIndex="-1" aria-hidden="true" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-desc">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div class="modal-icon" aria-hidden="true">⚠️</div>
-        <h3 id="modal-title" class="modal-title">Ez a végleges döntésed?</h3>
-      </div>
-      <div id="modal-desc" class="modal-body">
-        <p>A választásod rögzítésre kerül. Ezután megismerheted a lehetséges következményeket, de a döntéseden már nem változtathatsz.</p>
-        <div id="modal-selected-choice-preview" class="selected-choice-preview">
-          <!-- Preview of chosen letter and label -->
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button id="modal-btn-confirm" class="btn btn-accent">
-          Megerősítem a döntést
-        </button>
-        <button id="modal-btn-cancel" class="btn btn-outline">
-          Még nem döntöttem
-        </button>
-      </div>
     </div>
   </div>
 
