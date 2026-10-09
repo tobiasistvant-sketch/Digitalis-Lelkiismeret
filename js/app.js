@@ -75,6 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCopyJson: document.getElementById('btn-copy-json'),
     btnRestartGame: document.getElementById('btn-restart-game'),
 
+    // Image Lightbox Modal
+    imageModal: document.getElementById('image-modal'),
+    lightboxImg: document.getElementById('lightbox-img'),
+    lightboxClose: document.getElementById('lightbox-close'),
+
     // Confirmation Modal
     confirmModal: document.getElementById('confirm-modal'),
     modalChoicePreview: document.getElementById('modal-selected-choice-preview'),
@@ -242,6 +247,22 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.btnSubmitChoice.disabled = false;
   }
 
+  // --- LIGHTBOX ZOOM MODAL HANDLERS ---
+  function openLightbox(src, alt) {
+    if (!elements.imageModal) return;
+    elements.lightboxImg.src = src;
+    elements.lightboxImg.alt = alt || 'Nagyított kép';
+    elements.imageModal.classList.add('active');
+    elements.imageModal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeLightbox() {
+    if (!elements.imageModal) return;
+    elements.imageModal.classList.remove('active');
+    elements.imageModal.setAttribute('aria-hidden', 'true');
+    elements.lightboxImg.src = '';
+  }
+
   // --- VISUAL CONTEXT MOCKUPS FOR EACH SCENARIO ---
   function renderVisualMockup(sc) {
     const container = elements.scenarioVisualContainer;
@@ -285,148 +306,15 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         break;
 
-      case 'social_post_comments':
+      case 'image_scene':
         innerHTML = `
-          <div class="mockup-header">
-            <div class="mockup-title-area">
-              <div class="mockup-icon">🌐</div>
-              <div>
-                <div class="mockup-name">Nyilvános Bejegyzés & Kommentek</div>
-                <div class="mockup-sub">Közösségi média felület</div>
-              </div>
-            </div>
-          </div>
           <p class="mockup-story-p">${formattedStory}</p>
-          <div class="post-card">
-            <div class="chat-sender">Tegnap este - Nyilvános bejegyzés</div>
-            <div style="margin-top:0.5rem; font-style:italic;">„...te sértő komment hozzászólásod...”</div>
-            <div class="screenshot-badge">📸 Képernyőkép készült és megosztásra került!</div>
-          </div>
-        `;
-        break;
-
-      case 'ai_chat_editor':
-        innerHTML = `
-          <div class="mockup-header">
-            <div class="mockup-title-area">
-              <div class="mockup-icon">🤖</div>
-              <div>
-                <div class="mockup-name">AI Assistant & Beadandó Dokumentum</div>
-                <div class="mockup-sub">Határidő: Holnap 08:00</div>
-              </div>
+          ${sc.image ? `
+            <div class="scene-image-wrapper">
+              <img src="${sc.image}" alt="${sc.title}" class="scene-attached-img zoomable-img" title="Kattints a nagyításhoz" />
+              <div class="zoom-hint">🔍 Kattints a képre a nagyításhoz</div>
             </div>
-          </div>
-          <p class="mockup-story-p">${formattedStory}</p>
-          <div class="ai-interface">
-            <div class="ai-prompt-box">💬 Prompt: „Készíts egy teljes dolgozatot a megadott témában!”</div>
-            <div class="ai-output-box">
-              📄 Generált szöveg (100% elkészült):<br>
-              „A téma etikai és társadalmi vonatkozásai rendkívül összetettek...”
-            </div>
-          </div>
-        `;
-        break;
-
-      case 'news_feed':
-        innerHTML = `
-          <div class="mockup-header">
-            <div class="mockup-title-area">
-              <div class="mockup-icon">📰</div>
-              <div>
-                <div class="mockup-name">Közösségi Hírfolyam</div>
-                <div class="mockup-sub">Szenzációs bejegyzés</div>
-              </div>
-            </div>
-          </div>
-          <p class="mockup-story-p">${formattedStory}</p>
-          <div class="news-card">
-            <div class="news-card-body">
-              <div class="news-card-title">🚨 RENDKÍVÜLI: Súlyos visszaélés az ismert intézményben!</div>
-              <div class="news-stats">
-                <span>❤️👍 4.2k reakció</span>
-                <span>💬 850 hozzászólás</span>
-                <span class="no-source-warning">⚠️ Hiányzó ellenőrizhető forrás!</span>
-              </div>
-            </div>
-          </div>
-        `;
-        break;
-
-      case 'private_chat':
-        innerHTML = `
-          <div class="mockup-header">
-            <div class="mockup-title-area">
-              <div class="mockup-icon">🔒</div>
-              <div>
-                <div class="mockup-name">Privát Chat</div>
-                <div class="mockup-sub">Bizalmas üzenetváltás</div>
-              </div>
-            </div>
-          </div>
-          <p class="mockup-story-p">${formattedStory}</p>
-          <div class="chat-bubble" style="border-left: 3px solid var(--color-choice-b);">
-            <div class="chat-sender">Barátod</div>
-            <div>„Kérlek, ezt kezeld teljesen bizalmasan, senkinek ne mondd el...”</div>
-          </div>
-        `;
-        break;
-
-      case 'public_debate':
-        innerHTML = `
-          <div class="mockup-header">
-            <div class="mockup-title-area">
-              <div class="mockup-icon">💬</div>
-              <div>
-                <div class="mockup-name">Nyilvános Kommentvita</div>
-                <div class="mockup-sub">Vallás és Etika téma</div>
-              </div>
-            </div>
-          </div>
-          <p class="mockup-story-p">${formattedStory}</p>
-          <div class="chat-bubble key-message" style="width:100%;">
-            <div class="chat-sender">Vitapartner</div>
-            <div>„Na, erre mit mondasz, ha olyan nagy hívő vagy?”</div>
-          </div>
-        `;
-        break;
-
-      case 'late_night_feed':
-        innerHTML = `
-          <div class="mockup-header">
-            <div class="mockup-title-area">
-              <div class="mockup-icon">🌙</div>
-              <div>
-                <div class="mockup-name">Éjszakai Telefonképernyő</div>
-                <div class="mockup-sub">Másnap dolgozat!</div>
-              </div>
-            </div>
-          </div>
-          <p class="mockup-story-p">${formattedStory}</p>
-          <div class="night-container">
-            <div class="clock-display">00:17</div>
-            <div class="feed-notification">🔥 „Ezt még látnod kell! (0:40s)”</div>
-          </div>
-        `;
-        break;
-
-      case 'ai_generator':
-        innerHTML = `
-          <div class="mockup-header">
-            <div class="mockup-title-area">
-              <div class="mockup-icon">🎨</div>
-              <div>
-                <div class="mockup-name">AI Képgenerátor Szerkesztő</div>
-                <div class="mockup-sub">Megalázó generált kép</div>
-              </div>
-            </div>
-          </div>
-          <p class="mockup-story-p">${formattedStory}</p>
-          <div class="generator-preview">
-            <div class="generator-placeholder">
-              <span>🖼️ [Sematikus Élethű AI Előnézet: Tanár megalázó helyzetben]</span>
-              <span>⚠️ Mesterségesen generált tartalom</span>
-            </div>
-          </div>
+          ` : ''}
         `;
         break;
 
@@ -435,6 +323,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     container.innerHTML = innerHTML;
+
+    // Attach click listeners to zoomable images inside the mockup
+    const zoomableImgs = container.querySelectorAll('.zoomable-img, .chat-attached-img');
+    zoomableImgs.forEach(img => {
+      img.addEventListener('click', () => openLightbox(img.src, img.alt));
+    });
   }
 
   // --- CONFIRMATION MODAL HANDLERS ---
@@ -686,6 +580,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     elements.modalBtnConfirm.addEventListener('click', confirmDecision);
     elements.modalBtnCancel.addEventListener('click', cancelModal);
+
+    if (elements.lightboxClose) {
+      elements.lightboxClose.addEventListener('click', closeLightbox);
+    }
+    if (elements.imageModal) {
+      elements.imageModal.addEventListener('click', (e) => {
+        if (e.target === elements.imageModal) closeLightbox();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && elements.imageModal.classList.contains('active')) {
+          closeLightbox();
+        }
+      });
+    }
 
     elements.btnNextScenario.addEventListener('click', handleNextScenario);
 
