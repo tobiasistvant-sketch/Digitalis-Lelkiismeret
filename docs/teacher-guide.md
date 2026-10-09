@@ -45,7 +45,20 @@ Az alkalmazás **nem hagyományos teszt vagy kvíz**: nincs benne pontozás, sz�
 
 - **Azonosító:** A játék indításakor egy rövid, anonim munkamenet-azonosító generálódik (pl. `DL-A3X9K2`). Nem gyűjtünk teljes nevet vagy e-mail címet.
 - **Helyi Tárolás:** A böngésző frissítésekor a haladás megmarad (`localStorage`).
-- **Google Sheets Integráció:** A Google Apps Script végpont beállítása esetén az eredmények közvetlenül a tanár védett táblázatába érkeznek.
+- **Google Sheets Integráció:** Az alkalmazás közvetlenül elküldi a tanulók anonim eredményeit a tanár Google Sheets táblázatába a megadott Google Apps Script Web App végponton keresztül.
+
+### A Beküldések Ellenőrzése a Google Táblázatban:
+1. **Elküldött adatok:** A záróképernyőn az **„Eredmény elküldése a tanárnak”** gomb hatására az alábbi adatok érkeznek meg a táblázatba:
+   - **Időpont** (beküldés dátuma és ideje)
+   - **Munkamenet ID** (`DL-` azonosító)
+   - **Helyzet 1–8** (megerősített A/B/C/D döntések betűi)
+   - **Reflexiós válaszok** (Q1, Q2, Q3 kérdésekre adott válaszok)
+2. **Duplikáció-szűrés:** Az ismételt beküldési kísérletek ugyanazt a `munkamenet_azonosito`-t használják. Ha a táblázatban már létezik a bejegyzés, az Apps Script visszajelzi, hogy az adat korábban már beérkezett, megelőzve a duplikátumokat.
+3. **Ellenőrzési lépések:**
+   - Nyisd meg a játék záróképernyőjét.
+   - Note-old le a munkamenet azonosítót (pl. `DL-TEST02`).
+   - Kattints az **„Eredmény elküldése a tanárnak”** gombra.
+   - Ellenőrizd a csatolt Google Sheets táblázat legutolsó sorát, amelyben meg kell jelennie az adott munkamenet azonosítónak, döntéseknek és válaszoknak.
 
 ---
 
