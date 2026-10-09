@@ -3,11 +3,12 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Configured Apps Script URL (place real endpoint here when available)
-  const GOOGLE_APPS_SCRIPT_URL = '';
+  // Configured Google Apps Script URL for Digitalis Lelkiismeret results
+  const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1OSsmU52V4TjcoMDjZmaF7kAW8LIDsQIZ-dwKcsV35pHP8E6hLHlG5W8Dt9s-pXVyjg/exec';
 
   // Prevent multiple rapid clicks from registering multiple decisions
   let isProcessingChoice = false;
+  let isSubmitting = false;
 
   // App State Object
   let state = {
@@ -440,7 +441,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const notice = elements.submissionNotice;
     if (state.submissionStatus.submitted) {
       notice.className = 'notice-box notice-success';
-      notice.innerHTML = `✅ <strong>Eredmények sikeresen beküldve!</strong> (${new Date(state.submissionStatus.timestamp).toLocaleString('hu-HU')})`;
+      notice.innerHTML = `✅ <strong>Eredmények sikeresen beküldve a tanárnak!</strong> (${new Date(state.submissionStatus.timestamp).toLocaleString('hu-HU')})`;
+      notice.style.display = 'block';
+    } else if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+      notice.className = 'notice-box notice-info';
+      notice.innerHTML = `ℹ️ Az eredmények elküldhetők a tanárnak az alábbi gombra kattintva.`;
       notice.style.display = 'block';
     } else {
       notice.className = 'notice-box notice-info';
@@ -451,6 +456,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- SUBMISSION ACTIONS ---
   async function handleSubmitTeacher() {
+    if (isSubmitting) return;
+
     saveReflections();
 
     if (Object.keys(state.decisions).length < window.SCENARIOS.length) {
@@ -458,17 +465,36 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const payload = window.SubmissionHandler.buildPayload(state, window.SCENARIOS);
-    const result = await window.SubmissionHandler.submitToGoogleAppsScript(GOOGLE_APPS_SCRIPT_URL, payload);
+    const submitBtn = elements.btnSubmitTeacher;
+    const originalBtnText = submitBtn ? submitBtn.textContent : '';
 
-    if (result.success) {
-      state.submissionStatus.submitted = true;
-      state.submissionStatus.timestamp = new Date().toISOString();
-      saveState();
-      updateSubmissionNotice();
-      alert(result.message);
-    } else {
-      alert(result.message);
+    try {
+      isSubmitting = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Beküldés folyamatban...';
+      }
+
+      const payload = window.SubmissionHandler.buildPayload(state, window.SCENARIOS);
+      const result = await window.SubmissionHandler.submitToGoogleAppsScript(GOOGLE_APPS_SCRIPT_URL, payload);
+
+      if (result.success) {
+        state.submissionStatus.submitted = true;
+        state.submissionStatus.timestamp = new Date().toISOString();
+        saveState();
+        updateSubmissionNotice();
+        alert(result.message);
+      } else {
+        alert(result.message);
+      }
+    } catch (err) {
+      alert(`Hiba történt a beküldés során: ${err.message}`);
+    } finally {
+      isSubmitting = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
     }
   }
 
