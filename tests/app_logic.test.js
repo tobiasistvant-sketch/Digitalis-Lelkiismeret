@@ -47,29 +47,29 @@ SCENARIOS.forEach((sc, index) => {
 });
 console.log('✓ All 8 scenarios and 32 choice outcomes passed verification.');
 
-// Test 2: Choice Shuffling in Different Sessions
-console.log('\nTest 2: Verifying choice shuffling across different sessions...');
+// Test 2: Fixed Choice Order Across Sessions
+console.log('\nTest 2: Verifying choice order is permanently fixed as A, B, C, D across sessions...');
 const state1 = StorageHandler.getInitialState(SCENARIOS);
 const state2 = StorageHandler.getInitialState(SCENARIOS);
 
 assert.ok(state1.choiceOrders[1], 'Session 1 must have choice order for scenario 1');
-assert.strictEqual(state1.choiceOrders[1].length, 4, 'Shuffled choice array must have 4 keys');
-assert.deepStrictEqual([...state1.choiceOrders[1]].sort(), ['A', 'B', 'C', 'D'], 'Shuffled keys must contain A, B, C, D');
+assert.deepStrictEqual(state1.choiceOrders[1], ['A', 'B', 'C', 'D'], 'Choice order must strictly be A, B, C, D');
+assert.deepStrictEqual(state2.choiceOrders[1], ['A', 'B', 'C', 'D'], 'Choice order must strictly be A, B, C, D across sessions');
 
-// Test 3: Reload / Refresh Persistence of Shuffled Order
+// Test 3: Reload / Refresh Persistence of Fixed Order
 console.log('\nTest 3: Verifying persistence of choice order on reload...');
 StorageHandler.save(state1);
 const loaded = StorageHandler.load(SCENARIOS);
-assert.deepStrictEqual(loaded.state.choiceOrders, state1.choiceOrders, 'Choice order must remain unchanged after reload');
-console.log('✓ Choice order persists perfectly across page reloads.');
+assert.deepStrictEqual(loaded.state.choiceOrders[1], ['A', 'B', 'C', 'D'], 'Choice order must remain fixed after reload');
+console.log('✓ Choice order remains permanently fixed across page reloads.');
 
 // Test 4: Choice Consequences Mapping Accuracy
 console.log('\nTest 4: Verifying chosen response maps to its original correct consequences...');
-state1.decisions[1] = 'C'; // Original choice key C: "Megkérem a többieket, hogy töröljék."
-const sc1ChoiceC = SCENARIOS[0].choices['C'];
-assert.strictEqual(sc1ChoiceC.shortTitle, 'Nyilvános kiállás');
-assert.strictEqual(sc1ChoiceC.biblicalGuidance, 'Péld 24,11–12 – Felelősség azokért, akik veszélybe kerültek.');
-console.log('✓ Original choice consequences mapped accurately.');
+state1.decisions[1] = 'B'; // Choice key B in Scenario 1: "Nem küldöm tovább, de nem is szólok."
+const sc1ChoiceB = SCENARIOS[0].choices['B'];
+assert.strictEqual(sc1ChoiceB.shortTitle, 'Csendes kimaradás');
+assert.strictEqual(sc1ChoiceB.igehely, 'Péld 31,8–9');
+console.log('✓ Fixed choice consequences mapped accurately.');
 
 // Test 5: Restart Game Clears Local State & Generates New Session ID
 console.log('\nTest 5: Verifying restart game resets state and creates new session ID...');
