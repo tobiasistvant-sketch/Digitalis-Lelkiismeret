@@ -1,6 +1,6 @@
 /**
- * DIGITÁLIS LELKIISMERET - Scenarios & Choices Data Module
- * RÚF 2014 Bible references and ethical guidance included.
+ * DIGITÁLIS LELKIISMERET - Scenario Data & Consequences
+ * Contains all 8 scenarios with permanently fixed, one-time shuffled choice order (A, B, C, D).
  */
 
 const SCENARIOS = [
@@ -396,34 +396,20 @@ const SCENARIOS = [
     "choices": {
       "A": {
         "letter": "A",
-        "label": "Hasonló hangnemben visszavágok.",
-        "shortTitle": "Támadó visszavágás",
-        "immediate": "A vita élesebbé válhat, és a figyelem a személyeskedésre terelődik.",
-        "longTerm": "A hozzászólásaid alapján mások is véleményt alkothatnak rólad és arról, hogyan képviseled a hitedet.",
-        "ethics": "A hitünk védelme nem követeli meg mások megalázását. A kommunikáció módja maga is üzenetet hordoz.",
-        "biblicalGuidance": "1Pt 3,15–16 – A hitről szelídséggel és tisztelettel való számadás.",
-        "question": "Lehet-e igazad egy vitában, miközben a viselkedésed mégis helytelen?",
-        "igehely": "1Pt 3,15–16",
-        "bibliaiIdezet": "Ellenben az Urat, Krisztust tartsátok szentnek szívetekben, és legyetek készen mindenkor számot adni mindenkinek, aki számon kéri tőletek a bennetek élő reménységet. Ezt pedig szelíden és tisztelettudóan, jó lelkiismerettel tegyétek, hogy amivel rágalmaznak titeket, abban megszégyenüljenek azok, akik gyalázzák a ti Krisztusban való példás életeteket.",
-        "tanitas": "A hitről szelídséggel és tisztelettel való számadás.",
-        "bibliaiGuidance": "1Pt 3,15–16 – A hitről szelídséggel és tisztelettel való számadás."
+        "label": "Jelentem a hozzászólást, ha zaklató vagy gyűlöletkeltő.",
+        "shortTitle": "Bejelentés a platformon",
+        "immediate": "A platform megvizsgálhatja a bejelentést, de nem biztos, hogy eltávolítja a tartalmat.",
+        "longTerm": "Indokolt esetben csökkenhet a zaklatás. Ugyanakkor a puszta valláskritika vagy véleménykülönbség nem azonos a gyűlöletkeltéssel.",
+        "ethics": "A másik ember véleménynyilvánítási szabadságát akkor is tiszteletben kell tartani, ha nem értünk vele egyet. A zaklatás elleni fellépés ettől különböző kérdés.",
+        "biblicalGuidance": "Róm 12,18 – Amennyire rajtunk áll, törekedjünk a békességre.",
+        "question": "Hogyan különböztetnéd meg a sértőnek érzett véleményt a tényleges zaklatástól?",
+        "igehely": "Róm 12,18",
+        "bibliaiIdezet": "Ha lehetséges, amennyire tőletek telik, éljetek minden emberrel békességben.",
+        "tanitas": "Amennyire rajtunk áll, törekedjünk a békességre.",
+        "bibliaiGuidance": "Róm 12,18 – Amennyire rajtunk áll, törekedjünk a békességre."
       },
       "B": {
         "letter": "B",
-        "label": "Kulturáltan megfogalmazom, miért nem értek egyet.",
-        "shortTitle": "Tiszteletteljes válasz",
-        "immediate": "Világosan képviselheted a meggyőződésedet, bár nem biztos, hogy a másik fél elfogadja az érveidet.",
-        "longTerm": "A tiszteletteljes párbeszéd lehetőséget adhat a kölcsönös megértésre.",
-        "ethics": "A hitvallás és a másik ember tisztelete nem zárja ki egymást.",
-        "biblicalGuidance": "Kol 4,6 – Beszédünk legyen kedves és megfontolt.",
-        "question": "Hogyan mondhatod el a meggyőződésedet úgy, hogy közben valóban meghallgatod a másikat?",
-        "igehely": "Kol 4,6",
-        "bibliaiIdezet": "Beszédetek legyen mindenkor kedves, sóval fűszerezett, hogy így mindenkinek helyesen tudjatok felelni.",
-        "tanitas": "Beszédünk legyen kedves és megfontolt.",
-        "bibliaiGuidance": "Kol 4,6 – Beszédünk legyen kedves és megfontolt."
-      },
-      "C": {
-        "letter": "C",
         "label": "Nem reagálok, mert nem minden vitába érdemes belemenni.",
         "shortTitle": "Csendes visszahúzódás",
         "immediate": "Nem kapcsolódsz be a konfliktusba, így nem növeled annak hevességét.",
@@ -436,19 +422,33 @@ const SCENARIOS = [
         "tanitas": "Ideje van a hallgatásnak és ideje a beszédnek.",
         "bibliaiGuidance": "Préd 3,7 – Ideje van a hallgatásnak és ideje a beszédnek."
       },
+      "C": {
+        "letter": "C",
+        "label": "Kulturáltan megfogalmazom, miért nem értek egyet.",
+        "shortTitle": "Tiszteletteljes válasz",
+        "immediate": "Világosan képviselheted a meggyőződésedet, bár nem biztos, hogy a másik fél elfogadja az érveidet.",
+        "longTerm": "A tiszteletteljes párbeszéd lehetőséget adhat a kölcsönös megértésre.",
+        "ethics": "A hitvallás és a másik ember tisztelete nem zárja ki egymást.",
+        "biblicalGuidance": "Kol 4,6 – Beszédünk legyen kedves és megfontolt.",
+        "question": "Hogyan mondhatod el a meggyőződésedet úgy, hogy közben valóban meghallgatod a másikat?",
+        "igehely": "Kol 4,6",
+        "bibliaiIdezet": "Beszédetek legyen mindenkor kedves, sóval fűszerezett, hogy így mindenkinek helyesen tudjatok felelni.",
+        "tanitas": "Beszédünk legyen kedves és megfontolt.",
+        "bibliaiGuidance": "Kol 4,6 – Beszédünk legyen kedves és megfontolt."
+      },
       "D": {
         "letter": "D",
-        "label": "Jelentem a hozzászólást, ha zaklató vagy gyűlöletkeltő.",
-        "shortTitle": "Bejelentés a platformon",
-        "immediate": "A platform megvizsgálhatja a bejelentést, de nem biztos, hogy eltávolítja a tartalmat.",
-        "longTerm": "Indokolt esetben csökkenhet a zaklatás. Ugyanakkor a puszta valláskritika vagy véleménykülönbség nem azonos a gyűlöletkeltéssel.",
-        "ethics": "A másik ember véleménynyilvánítási szabadságát akkor is tiszteletben kell tartani, ha nem értünk vele egyet. A zaklatás elleni fellépés ettől különböző kérdés.",
-        "biblicalGuidance": "Róm 12,18 – Amennyire rajtunk áll, törekedjünk a békességre.",
-        "question": "Hogyan különböztetnéd meg a sértőnek érzett véleményt a tényleges zaklatástól?",
-        "igehely": "Róm 12,18",
-        "bibliaiIdezet": "Ha lehetséges, amennyire tőletek telik, éljetek minden emberrel békességben.",
-        "tanitas": "Amennyire rajtunk áll, törekedjünk a békességre.",
-        "bibliaiGuidance": "Róm 12,18 – Amennyire rajtunk áll, törekedjünk a békességre."
+        "label": "Hasonló hangnemben visszavágok.",
+        "shortTitle": "Támadó visszavágás",
+        "immediate": "A vita élesebbé válhat, és a figyelem a személyeskedésre terelődik.",
+        "longTerm": "A hozzászólásaid alapján mások is véleményt alkothatnak rólad és arról, hogyan képviseled a hitedet.",
+        "ethics": "A hitünk védelme nem követeli meg mások megalázását. A kommunikáció módja maga is üzenetet hordoz.",
+        "biblicalGuidance": "1Pt 3,15–16 – A hitről szelídséggel és tisztelettel való számadás.",
+        "question": "Lehet-e igazad egy vitában, miközben a viselkedésed mégis helytelen?",
+        "igehely": "1Pt 3,15–16",
+        "bibliaiIdezet": "Ellenben az Urat, Krisztust tartsátok szentnek szívetekben, és legyetek készen mindenkor számot adni mindenkinek, aki számon kéri tőletek a bennetek élő reménységet. Ezt pedig szelíden és tisztelettudóan, jó lelkiismerettel tegyétek, hogy amivel rágalmaznak titeket, abban megszégyenüljenek azok, akik gyalázzák a ti Krisztusban való példás életeteket.",
+        "tanitas": "A hitről szelídséggel és tisztelettel való számadás.",
+        "bibliaiGuidance": "1Pt 3,15–16 – A hitről szelídséggel és tisztelettel való számadás."
       }
     }
   },
@@ -530,34 +530,6 @@ const SCENARIOS = [
     "choices": {
       "A": {
         "letter": "A",
-        "label": "Megosztom, hiszen nem valódi fénykép.",
-        "shortTitle": "AI kép megosztása",
-        "immediate": "A kép több emberhez jut el. Egyesek viccként kezelik, mások valódi felvételnek hihetik.",
-        "longTerm": "Az érintett személy hírneve és méltósága sérülhet, a kép eredete pedig elhomályosulhat.",
-        "ethics": "Egy kép attól még okozhat valódi sérelmet, hogy mesterségesen készült.",
-        "biblicalGuidance": "2Móz 20,16 – A másik emberről terjesztett hamis állítás felelőssége.",
-        "question": "Megszűnik-e a felelősségünk, ha egy sértő tartalom nem valódi?",
-        "igehely": "2Móz 20,16",
-        "bibliaiIdezet": "Ne tanúskodj hamisan felebarátod ellen!",
-        "tanitas": "A másik emberről terjesztett hamis állítás felelőssége.",
-        "bibliaiGuidance": "2Móz 20,16 – A másik emberről terjesztett hamis állítás felelőssége."
-      },
-      "B": {
-        "letter": "B",
-        "label": "Nem osztom meg, de megtartom.",
-        "shortTitle": "Kép megtartása megosztás nélkül",
-        "immediate": "Nem járulsz hozzá a kép további terjesztéséhez.",
-        "longTerm": "A kép a birtokodban marad, és később ismét előkerülhet. A megtartás célja és a későbbi felhasználás is számít.",
-        "ethics": "A nem-megosztás fontos döntés, de érdemes azt is mérlegelni, szükséges-e megőrizni egy megalázó tartalmat.",
-        "biblicalGuidance": "1Kor 10,23 – Nem minden épít, ami megtehető.",
-        "question": "Van-e különbség egy sértő kép bizonyítékként való megőrzése és szórakozásból történő tárolása között?",
-        "igehely": "1Kor 10,23",
-        "bibliaiIdezet": "Minden szabad, de nem minden használ. Minden szabad, de nem minden épít.",
-        "tanitas": "Nem minden épít, ami megtehető.",
-        "bibliaiGuidance": "1Kor 10,23 – Nem minden épít, ami megtehető."
-      },
-      "C": {
-        "letter": "C",
         "label": "Elmagyarázom, miért lehet ez káros.",
         "shortTitle": "Káros következmények elmagyarázása",
         "immediate": "Az ismerősöd szembesülhet azzal, hogy a kép másnak valódi fájdalmat okozhat.",
@@ -570,8 +542,8 @@ const SCENARIOS = [
         "tanitas": "Az igazság szeretetben történő képviselete.",
         "bibliaiGuidance": "Ef 4,15 – Az igazság szeretetben történő képviselete."
       },
-      "D": {
-        "letter": "D",
+      "B": {
+        "letter": "B",
         "label": "Ha a kép súlyosan sértő, jelzem az illetékesnek.",
         "shortTitle": "Jelzés az illetékesnek",
         "immediate": "Egy felelős személy vagy az érintett platform megvizsgálhatja a helyzetet.",
@@ -583,6 +555,34 @@ const SCENARIOS = [
         "bibliaiIdezet": "Nyisd meg szádat a némáért, a mulandó emberek ügyéért! Nyisd meg szádat, ítélkezz igazságosan, juttasd igazához a nincstelent és a szegényt!",
         "tanitas": "A kiszolgáltatott ember védelme.",
         "bibliaiGuidance": "Péld 31,8–9 – A kiszolgáltatott ember védelme."
+      },
+      "C": {
+        "letter": "C",
+        "label": "Megosztom, hiszen nem valódi fénykép.",
+        "shortTitle": "AI kép megosztása",
+        "immediate": "A kép több emberhez jut el. Egyesek viccként kezelik, mások valódi felvételnek hihetik.",
+        "longTerm": "Az érintett személy hírneve és méltósága sérülhet, a kép eredete pedig elhomályosulhat.",
+        "ethics": "Egy kép attól még okozhat valódi sérelmet, hogy mesterségesen készült.",
+        "biblicalGuidance": "2Móz 20,16 – A másik emberről terjesztett hamis állítás felelőssége.",
+        "question": "Megszűnik-e a felelősségünk, ha egy sértő tartalom nem valódi?",
+        "igehely": "2Móz 20,16",
+        "bibliaiIdezet": "Ne tanúskodj hamisan felebarátod ellen!",
+        "tanitas": "A másik emberről terjesztett hamis állítás felelőssége.",
+        "bibliaiGuidance": "2Móz 20,16 – A másik emberről terjesztett hamis állítás felelőssége."
+      },
+      "D": {
+        "letter": "D",
+        "label": "Nem osztom meg, de megtartom.",
+        "shortTitle": "Kép megtartása megosztás nélkül",
+        "immediate": "Nem járulsz hozzá a kép további terjesztéséhez.",
+        "longTerm": "A kép a birtokodban marad, és később ismét előkerülhet. A megtartás célja és a későbbi felhasználás is számít.",
+        "ethics": "A nem-megosztás fontos döntés, de érdemes azt is mérlegelni, szükséges-e megőrizni egy megalázó tartalmat.",
+        "biblicalGuidance": "1Kor 10,23 – Nem minden épít, ami megtehető.",
+        "question": "Van-e különbség egy sértő kép bizonyítékként való megőrzése és szórakozásból történő tárolása között?",
+        "igehely": "1Kor 10,23",
+        "bibliaiIdezet": "Minden szabad, de nem minden használ. Minden szabad, de nem minden épít.",
+        "tanitas": "Nem minden épít, ami megtehető.",
+        "bibliaiGuidance": "1Kor 10,23 – Nem minden épít, ami megtehető."
       }
     }
   }

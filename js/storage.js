@@ -16,31 +16,19 @@ function generateSessionId() {
 }
 
 /**
- * Fisher-Yates shuffle algorithm for choice keys ['A', 'B', 'C', 'D']
- */
-function shuffleArray(array) {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-/**
- * Generates choice key mappings for all 8 scenarios.
- * Returns object { scenarioId: ['B', 'D', 'A', 'C'] }
+ * Generates fixed choice key mappings ['A', 'B', 'C', 'D'] for all 8 scenarios.
+ * Choice orders are permanently fixed in code for statistical evaluation.
  */
 function generateChoiceOrders(scenarios) {
   const orders = {};
   const list = scenarios || (typeof window !== 'undefined' ? window.SCENARIOS : []);
   if (list && list.length > 0) {
     list.forEach(sc => {
-      orders[sc.id] = shuffleArray(['A', 'B', 'C', 'D']);
+      orders[sc.id] = ['A', 'B', 'C', 'D'];
     });
   } else {
     for (let i = 1; i <= 8; i++) {
-      orders[i] = shuffleArray(['A', 'B', 'C', 'D']);
+      orders[i] = ['A', 'B', 'C', 'D'];
     }
   }
   return orders;
@@ -54,8 +42,8 @@ const StorageHandler = {
       currentState: 'START', // START, SCENARIO, CONFIRM, CONSEQUENCE, SUMMARY, REFLECTION, SUBMISSION
       currentScenarioIndex: 0,
       selectedChoiceLetter: null,
-      decisions: {}, // scenarioId -> originalChoiceKey ('A', 'B', 'C', or 'D')
-      choiceOrders: generateChoiceOrders(scenarios), // scenarioId -> Array of originalChoiceKeys in shuffled display order
+      decisions: {}, // scenarioId -> choiceKey ('A', 'B', 'C', or 'D')
+      choiceOrders: generateChoiceOrders(scenarios), // permanently fixed ['A', 'B', 'C', 'D']
       reflections: {
         q1: '',
         q2: '',
@@ -88,11 +76,9 @@ const StorageHandler = {
         };
       }
 
-      // Ensure choiceOrders exists for older saved states
-      if (!parsed.choiceOrders) {
-        parsed.choiceOrders = generateChoiceOrders(scenarios);
-        this.save(parsed);
-      }
+      // Enforce permanently fixed choice order ['A', 'B', 'C', 'D'] for all scenarios
+      parsed.choiceOrders = generateChoiceOrders(scenarios);
+      this.save(parsed);
 
       return { state: parsed, versionMismatch: false };
     } catch (e) {
@@ -121,7 +107,7 @@ const StorageHandler = {
 };
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { StorageHandler, CURRENT_VERSION, generateChoiceOrders, shuffleArray };
+  module.exports = { StorageHandler, CURRENT_VERSION, generateChoiceOrders };
 } else {
   window.StorageHandler = StorageHandler;
   window.CURRENT_VERSION = CURRENT_VERSION;
