@@ -8,8 +8,8 @@ const SCENARIOS = [
     "id": 1,
     "title": "A KÍNOS FOTÓ",
     "theme": "Online megszégyenítés, emberi méltóság, felelősség.",
-    "visualType": "chat_group",
-    "story": "Az osztálycsoportban valaki megoszt egy kínos fényképet Mátéról. A kép egy iskolai rendezvényen készült, amikor Máté kellemetlen helyzetbe került.\n\nNéhányan nevetnek, valaki mémként szerkeszti tovább. A kép már egy másik csoportba is eljutott.\n\nLilla új üzenetet küld:\n„Na, ki küldi tovább? 😂”",
+    "visualType": "image_scene",
+    "story": "Az iskolai műsor közben Evelin elesett a színpadon. Péter lefényképezte a kínos pillanatot, majd az osztálycsoportban megosztotta a képet.\n\nNéhányan nevetnek, valaki mémként szerkeszti tovább. A kép már egy másik csoportba is eljutott.\n\nLilla új üzenetet küld:\n»Na, ki küldi tovább? 😂«",
     "question": "Te mit tennél?",
     "groupName": "XII. B – Osztálycsoport",
     "memberCount": "24 tag",
@@ -64,7 +64,7 @@ const SCENARIOS = [
         "label": "Továbbküldöm. Ez csak egy vicces kép.",
         "shortTitle": "Kép továbbküldése",
         "immediate": "A kép újabb csoportba jut. Többen nevetnek rajta, és valaki újabb változatot készít belőle.",
-        "longTerm": "Máté megtudhatja, hogy te is részt vettél a terjesztésben. Megszégyenítve érezheti magát, és a köztetek lévő bizalom megsérülhet.",
+        "longTerm": "Evelin megtudhatja, hogy te is részt vettél a terjesztésben. Megszégyenítve érezheti magát, és a köztetek lévő bizalom megsérülhet.",
         "ethics": "A szórakozás nem írja felül a másik ember méltóságát. A továbbküldés is aktív részvétel, akkor is, ha nem te készítetted az eredeti képet.",
         "biblicalGuidance": "Ef 4,29 – Beszédünk és kommunikációnk a másik ember épülését szolgálja.",
         "question": "Attól, hogy nem te készítetted a képet, kisebb a felelősséged?",
@@ -78,7 +78,7 @@ const SCENARIOS = [
         "label": "Nem küldöm tovább, de nem is szólok.",
         "shortTitle": "Csendes kimaradás",
         "immediate": "Nem járulsz hozzá közvetlenül a terjedéshez, de a csoportban folytatódhat a gúnyolódás.",
-        "longTerm": "Máté segítség nélkül maradhat. Ugyanakkor elképzelhető, hogy a nyilvános fellépést nem érzed biztonságosnak.",
+        "longTerm": "Evelin segítség nélkül maradhat. Ugyanakkor elképzelhető, hogy a nyilvános fellépést nem érzed biztonságosnak.",
         "ethics": "A hallgatás és az óvatosság nem mindig ugyanaz. A segítségnyújtásnak több módja létezik, és nem minden helyzetben a nyilvános konfrontáció a legjobb megoldás.",
         "biblicalGuidance": "Péld 31,8–9 – Kiállás azok mellett, akiknek védelemre van szükségük.",
         "question": "Hogyan segíthetnél anélkül, hogy nyilvános vitába keverednél?",
@@ -103,19 +103,20 @@ const SCENARIOS = [
       },
       "D": {
         "letter": "D",
-        "label": "Privátban megkérdezem Mátét, segíthetek-e.",
+        "label": "Privátban megkérdezem Evelint, segíthetek-e.",
         "shortTitle": "Személyes támogatás",
-        "immediate": "Máté megtudja, hogy nincs egyedül. Elmondhatja, mire lenne szüksége.",
+        "immediate": "Evelin megtudja, hogy nincs egyedül. Elmondhatja, mire lenne szüksége.",
         "longTerm": "A támogatás erősítheti a bizalmat, de a kép terjedésének megállításához további lépésekre lehet szükség.",
         "ethics": "Az együttérzés és a másik ember akaratának tisztelete fontos. A segítség akkor igazán hasznos, ha figyelünk arra is, mire van szüksége az érintettnek.",
         "biblicalGuidance": "Róm 12,15 – Együttérzés az örülőkkel és a sírókkal.",
-        "question": "Mit tehetnél, ha Máté azt kéri, hogy ne avatkozz bele?",
+        "question": "Mit tehetnél, ha Evelin azt kéri, hogy ne avatkozz bele?",
         "igehely": "Róm 12,15",
         "bibliaiIdezet": "Örüljetek az örülőkkel, sírjatok a sírókkal.",
         "tanitas": "Együttérzés az örülőkkel és a sírókkal.",
         "bibliaiGuidance": "Róm 12,15 – Együttérzés az örülőkkel és a sírókkal."
       }
-    }
+    },
+    "image": "assets/kinos_foto_uj.png"
   },
   {
     "id": 2,
